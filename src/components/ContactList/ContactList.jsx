@@ -1,21 +1,41 @@
 import Contact from '../Contact/Contact.jsx';
 import css from './ContactList.module.css';
 import { useSelector } from 'react-redux';
+import {
+  selectContacts,
+  selectLoading,
+  selectError,
+  selectFilteredContacts,
+} from '../../redux/contactsSlice';
 
 export default function ContactList() {
-  const allContacts = useSelector((state) => state.contacts.items);
-  const filter = useSelector((state) => state.filters.name || '');
+  const allContacts = useSelector(selectContacts);
 
-  const filteredContacts = allContacts.filter((contact) =>
-    contact.name.toLowerCase().includes(filter.toLowerCase()),
-  );
+  const isLoading = useSelector(selectLoading);
+  const isError = useSelector(selectError);
+
+  const filteredContacts = useSelector(selectFilteredContacts);
   return (
-    <ul className={css.contactList}>
-      {filteredContacts.map((contact) => (
-        <li className={css.contactListItem} key={contact.id}>
-          <Contact contact={contact} />
-        </li>
-      ))}
-    </ul>
+    <div>
+      <ul className={css.contactList}>
+        {isLoading && <p>Loading contacts...</p>}
+        {isError && <p>Error: {isError}</p>}
+        {filteredContacts.map((contact) => (
+          <li className={css.contactListItem} key={contact.id}>
+            <Contact contact={contact} />
+          </li>
+        ))}
+      </ul>
+      {!isLoading &&
+        !isError &&
+        filteredContacts.length === 0 &&
+        allContacts.length > 0 && (
+          <p>No contacts found matching your filter.</p>
+        )}
+
+      {!isLoading && !isError && allContacts.length === 0 && (
+        <p>Your phonebook is empty. Add your first contact!</p>
+      )}
+    </div>
   );
 }

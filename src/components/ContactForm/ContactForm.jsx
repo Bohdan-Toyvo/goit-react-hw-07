@@ -5,8 +5,8 @@ import * as Yup from 'yup';
 import 'yup-phone-lite';
 import css from './ContactForm.module.css';
 
-import { useDispatch } from 'react-redux'; 
-import { addContact } from '../../redux/contactsSlice';
+import { useDispatch } from 'react-redux';
+import { addContact } from '../../redux/contactsOps';
 
 const contactSchema = Yup.object().shape({
   name: Yup.string()
@@ -24,7 +24,7 @@ export default function ContactForm() {
   const dispatch = useDispatch();
 
   const handleSubmit = (values, { resetForm }) => {
-     dispatch(addContact(values.name, values.number));
+    dispatch(addContact({ name: values.name, number: values.number }));
     resetForm();
   };
 

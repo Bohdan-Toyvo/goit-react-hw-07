@@ -37,6 +37,7 @@
   cursor: pointer;
   font-size: 0.9em;
   color: black;
+  margin-left: 20px;
 }
 
 .deleteButton:hover {
